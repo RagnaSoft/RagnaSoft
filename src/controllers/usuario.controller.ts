@@ -9,10 +9,10 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param, patch, post, put, requestBody,
+  getModelSchemaRef, HttpErrors, param, patch, post, put, requestBody,
   response
 } from '@loopback/rest';
-import {Usuario} from '../models';
+import {Credenciales, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
 import {AutenticacionService} from '../services';
 const fetch = require('node-fetch');
@@ -24,6 +24,36 @@ export class UsuarioController {
     @service(AutenticacionService)
     public servicioAutenticacion: AutenticacionService
   ) { }
+
+  @post('/IdentificarUsuario', {
+    responses: {
+      '200': {
+        description: "Identificación de Usuario"
+      }//Cierre del '200'
+    }//Cierre del responses
+  })
+  async IdentificarUsuario(
+    @requestBody() credenciales: Credenciales
+    /*El requestBody significa en este caso que debe tener unas
+    credenciales para poder acceder a esa sección*/
+  ) {
+    let user = await this.servicioAutenticacion.IdentificarUsuario(
+      credenciales.Usuario, credenciales.Clave);
+
+    if (user) {
+      let token = this.servicioAutenticacion.GenerarTokenJWT(user);
+      return {
+        datos: {
+          nombre: user.Nombres,
+          correo: user.Correo,
+          id: user.Id
+        },
+        tk: token
+      }
+    } else {
+      throw new HttpErrors[401]('Datos Invalidos');
+    }
+  }
 
   @post('/usuarios')
   @response(200, {
