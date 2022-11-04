@@ -2,7 +2,8 @@
 # RagnaSoft
 Encargados de la realización de una página web para una clínica veterinaria
 Actualización (2-Noviembre-2022) se está realizando el método de servicio autenticación, quedó listo el
-proceso de notificación, ahora estamos en el proceso del método para dar acceso
+proceso de notificación, también se hizo el proceso del método para dar acceso validando el usuario y
+contraseña
 =======
 # mascotafeliz
 

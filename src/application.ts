@@ -1,14 +1,18 @@
+import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
-import {
-  RestExplorerBindings,
-  RestExplorerComponent,
-} from '@loopback/rest-explorer';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
+import {
+  RestExplorerBindings,
+  RestExplorerComponent
+} from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
+import {EstrategiaAdministrador} from './strategies/Administrador';
+import {EstrategiaAsesor} from './strategies/Asesor';
+import {EstrategiaCliente} from './strategies/Cliente';
 
 export {ApplicationConfig};
 
@@ -40,5 +44,17 @@ export class MascotaFeliz extends BootMixin(
         nested: true,
       },
     };
+    //Estrategia autenticacion administrador
+    registerAuthenticationStrategy(this, EstrategiaAdministrador);
+    //Aquí se agregan las lineas para cada estrategia
+    this.component(AuthenticationComponent);
+
+    //Estrategia autenticacion asesor
+    registerAuthenticationStrategy(this, EstrategiaAsesor);
+    this.component(AuthenticationComponent);
+
+    //Estrategia autenticacion cliente
+    registerAuthenticationStrategy(this, EstrategiaCliente);
+    this.component(AuthenticationComponent);
   }
 }

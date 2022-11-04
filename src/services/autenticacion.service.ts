@@ -21,10 +21,12 @@ export class AutenticacionService {
     let clave = generador(8, false);
     return clave;
   }
+
   CifrarClave(clave: string) {
     let claveCifrada = encriptado.MD5(clave);
     return claveCifrada;
   }
+
   IdentificarUsuario(user: string, password: string) {
     try {
       let us = this.usuarioRepository.findOne({where: {Correo: user, Contrasena: password}});
@@ -36,6 +38,7 @@ export class AutenticacionService {
       return false;
     }
   }//Cierre de la función IdentificarUsuario
+
   GenerarTokenJWT(usuario: Usuario) {
     let token = jwt.sign({
       data: {
